@@ -1,0 +1,23 @@
+## Creating a Docker image
+
+FROM ubuntu:20.04
+
+- # Install dependencies
+RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
+
+- # Set the working directory
+WORKDIR /usr/local/bin
+
+- # Download and unarchive plink2 (adjust version or URL as needed)
+RUN wget https://s3.amazonaws.com/plink2-assets/alpha2/plink2_linux_x86_64_latest.zip \
+    && unzip plink2_linux_x86_64_latest.zip \
+    && rm plink2_linux_x86_64_latest.zip
+
+- # Make sure plink2 is executable
+RUN chmod +x plink2
+
+- # By default, start in /data
+WORKDIR /data
+
+- # Set plink2 as the default command (e.g., showing help)
+CMD ["plink2", "--help"]
